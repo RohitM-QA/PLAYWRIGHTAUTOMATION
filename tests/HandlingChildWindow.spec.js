@@ -6,11 +6,12 @@ test('Child Window Handling', async({browser})=>
     const page = await context.newPage();
 
     await page.goto("https://rahulshettyacademy.com/loginpagePractise/");    
-    const documentLink = page.locator("a[href*='documents']");
-    const page2 = await context.waitForEvent('page');   //Wait for New Page (Child Window) to Open
-    documentLink.click();   //new page will open after clicking this link
-    
+    const documentLink = page.locator("a[href*='documents-request']");
 
+    Promise.all(
+    [context.waitForEvent('page'),    //Listen for any new Pending, Rejected, Fulfilled Page Event
+    documentLink.click(),
+])
 
 
 
