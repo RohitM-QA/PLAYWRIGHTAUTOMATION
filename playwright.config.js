@@ -6,7 +6,7 @@ import { defineConfig, devices } from '@playwright/test';
  * @see https://playwright.dev/docs/test-configuration
  */
 const config = ({
-  testDir: './tests', 
+  testDir: './tests/Login.spec.js', 
   timeout: 40 * 1000, 
   expect:{
     timeout: 5000
