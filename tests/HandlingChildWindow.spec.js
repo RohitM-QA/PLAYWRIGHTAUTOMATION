@@ -22,6 +22,6 @@ test('Child Window Handling', async({browser})=>
 
     await page.locator('#username').fill(domain);   //Type the username in the parent page
     await page.pause();  //Debug (Optional)
-    console.log(await page.locator('#username').textContent());   //Get the text content of the username field to verify
+    console.log(await page.locator('#username').inputValue());   //Get the text content of the username field to verify
 
 });
