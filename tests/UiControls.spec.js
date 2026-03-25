@@ -1,7 +1,6 @@
-const {test, expect} = require('@playwright/test');
+const { test, expect } = require('@playwright/test');
 
-test('UI Controls', async({page})=>
-{
+test('UI Controls', async ({ page }) => {
     await page.goto("https://rahulshettyacademy.com/loginpagePractise/");
     const userName = page.locator('#username');  //Define Locators
     const signIn = page.locator("#signInBtn");   //Define Locators
@@ -20,14 +19,14 @@ test('UI Controls', async({page})=>
 
     await expect(documentLink).toHaveAttribute("class", "blinkingText");   //Verify Attribute of Link
 
-    
-    
-    
-    
-    //await page.pause();  //Debug (Optional)
-    
- 
 
-    
+
+
+
+    //await page.pause();  //Debug (Optional)
+
+
+
+
 
 });
