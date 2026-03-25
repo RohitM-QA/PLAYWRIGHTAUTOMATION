@@ -2,6 +2,7 @@ const {test, expect} = require('@playwright/test');
 
 test('Client App Login', async({page})=>
 {
+    const email = 'rohit.mandal2020@gmail.com';
     const productName = "ZARA COAT 3";   //product name to be added in the cart
     const products = page.locator(".card-body");
     await page.goto("https://rahulshettyacademy.com/client/");
@@ -30,8 +31,23 @@ test('Client App Login', async({page})=>
     const isProductVisible = await page.locator("h3:has-text('ZARA COAT 3')").isVisible(); //waiting for the product to be visible in the cart, and this not a css
     expect(isProductVisible).toBeTruthy(); //asserting that the product is visible in the cart
 
+    await page.locator("text=Checkout").click();
+    await page.locator("[placeholder*='Country']").pressSequentially("ind", {delay: 150 });
 
-
+    const dropdown = page.locator(".ta-results");
+    await dropdown.waitFor();
+    const optionsCount = await dropdown.locator("button").count();
+    for(let i = 0; i< optionsCount; ++i)
+        {
+           const text = await dropdown.locator("button").nth(i).textContent();
+           if(text === " India")
+           {
+                await dropdown.locator("button").nth(i).click();
+                break;
+           }
+        }
+        expect(page.locator(".user__name [type='text']").first()).toHaveText(email);
+        await page.locator("action__submit ").click();
 
 });
 
