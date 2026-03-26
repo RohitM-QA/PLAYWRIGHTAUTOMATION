@@ -30,24 +30,41 @@ test('Client App Login', async ({ page }) => {
     expect(isProductVisible).toBeTruthy(); //asserting that the product is visible in the cart
 
     await page.locator("text=Checkout").click();
-    await page.locator("[placeholder*='Country']").pressSequentially("ind", { delay: 150 });
+    await page.locator("[placeholder*='Country']").pressSequentially("ind", { delay: 150 });  //entering the country name in the dropdown
+    const dropdown = page.locator(".ta-results");   //locating the dropdown
 
-    const dropdown = page.locator(".ta-results");
     await dropdown.waitFor();
-    const optionsCount = await dropdown.locator("button").count();
-    for (let i = 0; i < optionsCount; ++i) {
-        const text = await dropdown.locator("button").nth(i).textContent();
-        if (text === " India") {
-            await dropdown.locator("button").nth(i).click();
+    const optionsCount = await dropdown.locator("button").count();   //counting the number of options in the dropdown
+    for (let i = 0; i < optionsCount; ++i) {        //iterating through the options in the dropdown
+        const text = await dropdown.locator("button").nth(i).textContent();   //getting the text of the option
+        if (text === " India") {    //checking for the option "India" in the dropdown
+            await dropdown.locator("button").nth(i).click();   //clicking on the option "India" in the dropdown
             break;
         }
     }
-    await expect(page.locator(".user__name input[type='text']")).toHaveValue(email);
+    await expect(page.locator(".user__name input[type='text']")).toHaveValue(email);  //asserting that the email is pre-filled in the checkout page
     await page.locator(".action__submit").click();
 
-    await expect(page.locator(".hero-primary")).toHaveText(" Thankyou for the order. ");
-    const orderID = await page.locator("label[class='ng-star-inserted']").textContent();
+    await expect(page.locator(".hero-primary")).toHaveText(" Thankyou for the order. ");  //asserting that the order is placed successfully
+    const orderID = await page.locator("label[class='ng-star-inserted']").textContent();   //getting the order ID from the confirmation page
     console.log(orderID);
+
+    await page.locator("button[routerlink*='myorders']").click();  //clicking on my orders to verify that the order is present in the orders page
+    await page.locator("tbody").waitFor();   //waiting for the orders table to be visible
+    const rows = await page.locator("tbody tr"); //locating the rows in the orders table
+
+    for (let i = 0; i < await rows.count(); ++i)    //iterating through the rows in the orders table to find the order ID
+    {
+        const rowOrderID = await rows.nth(i).locator("th").textContent();   //getting the order ID from the row
+        if (orderID.includes(rowOrderID))   //checking if the order ID from the confirmation page is present in the orders table
+        {
+            await rows.nth(i).locator("button").first().click();  //clicking on the view button to view the order details
+            break;
+        }
+    }
+
+    const orderIdDetails = await page.locator(".col-text").textContent();  //waiting for the order details to be visible
+    expect(orderIdDetails).toBeTruthy();  //asserting that the order details are visible
 
 });
 
